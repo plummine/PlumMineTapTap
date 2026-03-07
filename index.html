@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PlumMine - Official</title>
+    <title>PlumMine - 🧺🍒 Official</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="ace4b2a0-0bfe-493d-b8e2-c39de7fe1ce2"></script>
     
@@ -13,43 +13,44 @@
         .page { display: none; padding: 15px; padding-bottom: 90px; min-height: 100vh; box-sizing: border-box; text-align: center; }
         .active { display: block; }
 
-        /* হেডার: নাম এবং প্রোফাইল */
+        /* হেডার: টাইটেলে ঝুড়ি ও বড়ই */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; }
         .header-left { display: flex; align-items: center; gap: 8px; font-size: 24px; font-weight: bold; color: #1a5d1a; }
         .header-left img { width: 30px; }
         .header-right img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; }
 
-        /* ব্যালেন্স কার্ড: ছবির মতো হুবহু ডিজাইন */
+        /* ব্যালেন্স কার্ড ডিজাইন */
         .balance-container { background: #fff9c4; border: 3px solid var(--accent); border-radius: 25px; width: 92%; margin: 10px auto; padding: 15px; box-shadow: 0 6px 0 #8d6e6333; position: relative; display: flex; flex-direction: column; align-items: flex-start; }
         .balance-info { text-align: left; width: 60%; }
         .balance-info small { font-weight: bold; color: #5d4037; font-size: 13px; }
         .balance-info h1 { font-size: 45px; margin: 2px 0; color: #d84315; letter-spacing: -1px; }
-        .basket-side { position: absolute; right: 15px; top: 15px; width: 100px; } /* ঝুড়ি এখানে থাকবে */
+        .basket-side { position: absolute; right: 15px; top: 15px; width: 100px; } 
         
         .progress-section { width: 100%; margin-top: 10px; text-align: left; }
         .progress-label { font-size: 12px; color: #5d4037; font-weight: bold; margin-bottom: 5px; }
         .progress-bar-bg { width: 100%; background: #fffde7; height: 12px; border-radius: 10px; border: 1px solid #d7ccc8; overflow: hidden; }
         #fill { width: 0%; height: 100%; background: linear-gradient(to right, #42a5f5, #1976d2); transition: width 0.3s; }
 
-        /* গেম এরিয়া: গাছ, মাটি ও ঝুড়ি */
+        /* গেম এরিয়া: গাছের গোড়ায় ঝুড়ি */
         .game-zone { position: relative; height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
         #plum-tree { width: 250px; z-index: 5; cursor: pointer; transition: transform 0.1s; margin-bottom: 25px; }
         #plum-tree:active { transform: scale(0.95); }
         .ground-patch { width: 100%; height: 50px; background: #81c784; border-radius: 50% 50% 0 0; position: absolute; bottom: 0; z-index: 1; }
-        .collect-basket { width: 120px; position: absolute; bottom: 10px; z-index: 6; }
+        
+        /* আপনার নির্দেশিত ঝুড়ি */
+        .collect-basket { width: 120px; position: absolute; bottom: 10px; z-index: 6; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
 
-        /* এনিমেশন */
+        /* ফল পড়ার এনিমেশন */
         .falling-plum { position: absolute; font-size: 24px; animation: fallAnim 0.8s ease-in forwards; z-index: 10; pointer-events: none; }
         @keyframes fallAnim { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(280px); opacity: 0; } }
 
-        /* নেভিগেশন বার: ছবির মতো হুবহু কালার ও স্টাইল */
+        /* নেভিগেশন বার */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; height: 70px; align-items: center; }
         .nav-link { text-align: center; font-size: 11px; color: #757575; cursor: pointer; text-decoration: none; flex: 1; display: flex; flex-direction: column; align-items: center; }
         .nav-link img { width: 26px; height: 26px; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.6; }
         .nav-link.active-nav { color: #8d6e63; font-weight: bold; }
         .nav-link.active-nav img { filter: none; opacity: 1; }
 
-        /* টাস্ক কার্ড */
         .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid var(--primary); }
         .btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
@@ -59,7 +60,7 @@
     <div id="home" class="page active">
         <div class="header">
             <div class="header-left">
-                <img src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Basket Icon"> PlumMine
+                🧺🍒 PlumMine
             </div>
             <div class="header-right">
                 <img id="user-pic" src="https://via.placeholder.com/35" alt="User">
@@ -71,7 +72,7 @@
                 <small>YOUR BOIROI BALANCE</small>
                 <h1 id="bal">0</h1>
             </div>
-            <img class="basket-side" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Side Basket">
+            <img class="basket-side" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Basket Icon">
             
             <div class="progress-section">
                 <div class="progress-label">Next ad in [Tap: <span id="tc">0</span>/50]</div>
@@ -82,7 +83,7 @@
         <div class="game-zone" onclick="doTap()">
             <img id="plum-tree" src="https://i.ibb.co.com/TBfn8G8M/27099-removebg-preview.png" alt="Tree">
             <div class="ground-patch"></div>
-            <img class="collect-basket" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Bottom Basket">
+            <img class="collect-basket" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Basket">
             <div id="p-area" style="position: absolute; top: 100px; width: 100%;"></div>
         </div>
     </div>
@@ -174,7 +175,7 @@
                 const last = localStorage.getItem(`t_${i}`);
                 const done = last && (new Date().getTime() - last < 86400000);
                 taskDiv.innerHTML += `<div class="card"><span>Task ${i} (10 🍒)</span>
-                <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${id})">${done ? 'Done' : 'Claim'}</button></div>`;
+                <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button></div>`;
             }
         }
 
