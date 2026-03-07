@@ -10,68 +10,59 @@
     <style>
         :root { --primary: #2e7d32; --accent: #8d6e63; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #e3f2fd; margin: 0; padding: 0; user-select: none; overflow: hidden; }
-        .page { display: none; padding: 10px; padding-bottom: 90px; min-height: 100vh; box-sizing: border-box; text-align: center; }
+        .page { display: none; padding: 10px; padding-bottom: 90px; height: 100vh; box-sizing: border-box; text-align: center; overflow-y: auto; }
         .active { display: block; }
 
         /* ব্যালেন্স কার্ড */
         .balance-container { background: #fff9c4; border: 3px solid var(--accent); border-radius: 25px; width: 94%; margin: 5px auto; padding: 15px; position: relative; display: flex; flex-direction: column; align-items: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .balance-info h1 { font-size: 48px; margin: 2px 0; color: #d84315; font-weight: 800; }
-        
-        /* আপনার দেওয়া নতুন ছবি ব্যালেন্সের পাশে */
-        .basket-side { position: absolute; right: 10px; top: 10px; width: 110px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); animation: bounce 2s infinite ease-in-out; }
+        .basket-side { position: absolute; right: 10px; top: 10px; width: 110px; animation: bounce 2s infinite ease-in-out; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        .progress-bar-bg { width: 100%; background: #fffde7; height: 14px; border-radius: 10px; border: 1px solid #d7ccc8; overflow: hidden; margin-top: 12px; }
-        #fill { width: 0%; height: 100%; background: linear-gradient(to right, #42a5f5, #1976d2); transition: width 0.3s; }
-
-        /* বড় গাছ সেকশন */
-        .game-zone { position: relative; height: 55vh; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; }
-        #plum-tree { width: 95%; max-width: 450px; z-index: 5; transition: transform 0.1s; }
+        /* গাছ সেকশন */
+        .game-zone { position: relative; height: 50vh; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        #plum-tree { width: 95%; max-width: 450px; transition: transform 0.1s; }
         #plum-tree:active { transform: scale(0.92); }
-        .ground-patch { width: 100%; height: 60px; background: #81c784; border-radius: 50% 50% 0 0; position: absolute; bottom: -20px; z-index: 1; }
 
-        /* ফল পড়ার এনিমেশন */
-        .falling-plum { position: absolute; font-size: 28px; animation: fallToGround 0.5s ease-in forwards; z-index: 10; pointer-events: none; }
-        @keyframes fallToGround { 0% { transform: translateY(-100px); opacity: 1; } 100% { transform: translateY(220px); opacity: 1; } }
-        .on-ground { position: absolute; font-size: 22px; bottom: 20px; z-index: 2; opacity: 0.9; }
+        /* টাস্ক লিস্ট স্ক্রলিং ঠিক করা হয়েছে */
+        #task-list { max-height: 65vh; overflow-y: auto; padding: 10px; border-radius: 15px; }
 
-        /* নেভিগেশন বার */
+        /* নেভিগেশন বার - রেফার বাটন যুক্ত */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; height: 75px; align-items: center; z-index: 1000; }
-        .nav-link { text-align: center; font-size: 12px; color: #777; cursor: pointer; flex: 1; font-weight: 500; }
-        .nav-link img { width: 30px; display: block; margin: 0 auto 5px; }
+        .nav-link { text-align: center; font-size: 11px; color: #777; cursor: pointer; flex: 1; }
+        .nav-link img { width: 26px; display: block; margin: 0 auto 4px; }
         .nav-link.active-nav { color: #d84315; font-weight: bold; }
 
-        /* ইনপুট বক্স ডিজাইন */
-        .input-group { width: 90%; margin: 15px auto; text-align: left; }
-        .input-group label { font-size: 13px; font-weight: bold; color: #5d4037; display: block; margin-bottom: 5px; }
-        .input-group input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+        /* ফ্লোটিং টেলিগ্রাম বাটন */
+        .floating-tg { position: fixed; bottom: 90px; right: 20px; width: 55px; height: 55px; background: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 2000; cursor: pointer; animation: pulse 2s infinite; }
+        .floating-tg img { width: 35px; height: 35px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .btn { background: var(--primary); color: white; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
+
+    <div class="floating-tg" onclick="window.open('https://t.me/HasiEarnigZone')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram">
+    </div>
 
     <div id="home" class="page active">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 20px;">
             <div style="font-size:24px; font-weight:bold; color:#1a5d1a;">🧺🍒 PlumMine</div>
             <img id="user-pic" src="https://via.placeholder.com/40" style="border-radius:50%;">
         </div>
-
         <div class="balance-container">
             <div class="balance-info">
                 <small>YOUR BOIROI BALANCE</small>
                 <h1 id="bal">0</h1>
             </div>
             <img class="basket-side" src="https://i.ibb.co.com/TDnYXwG1/27118-removebg-preview.png">
-            
-            <div style="width:100%; text-align:left; font-size:13px; margin-top:8px; font-weight:bold;">Next ad in [Tap: <span id="tc">0</span>/50]</div>
             <div class="progress-bar-bg"><div id="fill"></div></div>
         </div>
-        
         <div class="game-zone" onclick="doTap()">
             <img id="plum-tree" src="https://i.ibb.co.com/TBfn8G8M/27099-removebg-preview.png">
-            <div class="ground-patch"></div>
             <div id="p-area" style="position: absolute; width: 100%; height: 100%; pointer-events:none;"></div>
         </div>
     </div>
@@ -81,61 +72,46 @@
         <div id="task-list"></div>
     </div>
 
+    <div id="refer" class="page">
+        <h2 style="color:var(--primary)">👥 Refer Friends</h2>
+        <div class="card" style="flex-direction: column; gap: 15px;">
+            <p>Invite friends and earn 100 🍒 for each!</p>
+            <button class="btn" onclick="tg.shareLink('https://t.me/PlumMineBot?start=ref')">Invite Now</button>
+        </div>
+    </div>
+
     <div id="withdraw" class="page">
         <h2 style="color:var(--primary)">💰 Withdraw</h2>
-        <div class="balance-container" style="align-items: center;">
-            <p>Your Current Balance</p>
-            <h1 id="w-bal" style="color:#d84315;">0</h1>
-            <small>Minimum Withdraw: 5000 🍒</small>
-        </div>
-
-        <div class="input-group">
-            <label>Amount to Withdraw</label>
-            <input type="number" id="w-amount" placeholder="Enter Amount (Min 5000)">
-        </div>
-
-        <div class="input-group">
-            <label>Binance B2P BSC (BEP20) Address</label>
-            <input type="text" id="w-address" placeholder="Paste your BSC Address here">
-        </div>
-
-        <button class="btn" style="width:90%;" onclick="processWithdraw()">Withdraw Now</button>
+        <input type="number" id="w-amount" placeholder="Amount (Min 5000)" style="width:90%; padding:15px; margin-bottom:10px; border-radius:10px; border:1px solid #ccc;">
+        <input type="text" id="w-address" placeholder="BSC (BEP20) Address" style="width:90%; padding:15px; margin-bottom:15px; border-radius:10px; border:1px solid #ccc;">
+        <button class="btn" style="width:90%" onclick="processWithdraw()">Withdraw Now</button>
     </div>
 
     <div id="support" class="page">
-        <h2 style="color:var(--primary)">🎧 Support Center</h2>
+        <h2 style="color:var(--primary)">🎧 Support</h2>
         <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi')">
-            <span>Admin Support</span><button class="btn" style="padding:10px 15px">Chat</button>
+            <span>Admin Chat</span><button class="btn">Chat</button>
+        </div>
+        <div class="card" onclick="window.open('https://t.me/HasiEarnigZone')">
+            <span>Our Channel</span><button class="btn">Join</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-link active-nav" onclick="nav('home', this)">
-            <img src="https://i.ibb.co.com/TDnYXwG1/27118-removebg-preview.png">Home
-        </div>
-        <div class="nav-link" onclick="nav('tasks', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png">Tasks
-        </div>
-        <div class="nav-link" onclick="nav('withdraw', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png">Withdraw
-        </div>
-        <div class="nav-link" onclick="nav('support', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/4333/4333609.png">Support
-        </div>
+        <div class="nav-link active-nav" onclick="nav('home', this)"><img src="https://i.ibb.co.com/TDnYXwG1/27118-removebg-preview.png">Home</div>
+        <div class="nav-link" onclick="nav('tasks', this)"><img src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png">Tasks</div>
+        <div class="nav-link" onclick="nav('refer', this)"><img src="https://cdn-icons-png.flaticon.com/512/912/912318.png">Refer</div>
+        <div class="nav-link" onclick="nav('withdraw', this)"><img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png">Withdraw</div>
+        <div class="nav-link" onclick="nav('support', this)"><img src="https://cdn-icons-png.flaticon.com/512/4333/4333609.png">Support</div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand();
-
         let points = parseInt(localStorage.getItem('p_bal')) || 0;
         let taps = 0;
-        const adLink = "https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c";
 
         function update() {
             document.getElementById('bal').innerText = points.toLocaleString();
-            document.getElementById('w-bal').innerText = points.toLocaleString();
-            document.getElementById('tc').innerText = taps;
             document.getElementById('fill').style.width = (taps / 50) * 100 + "%";
             localStorage.setItem('p_bal', points);
         }
@@ -148,59 +124,25 @@
             if(id === 'tasks') renderTasks();
         }
 
-        function doTap() {
-            if (taps < 50) {
-                points++; taps++; update();
-                const p = document.createElement('div');
-                p.className = 'falling-plum'; p.innerText = "🍒";
-                p.style.left = (Math.random() * 60 + 20) + "%";
-                document.getElementById('p-area').appendChild(p);
-                setTimeout(() => { p.className = 'on-ground'; setTimeout(() => p.remove(), 1500); }, 500);
-            } else {
-                window.open(adLink, '_blank');
-                taps = 0; update();
-            }
-        }
-
         function renderTasks() {
-            const taskDiv = document.getElementById('task-list');
-            taskDiv.innerHTML = '';
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
             for(let i=1; i<=10; i++) {
-                const last = localStorage.getItem(`t_${i}`);
-                const done = last && (new Date().getTime() - last < 86400000);
-                taskDiv.innerHTML += `<div class="card"><span>Task ${i} (10 🍒)</span>
-                <button class="btn" style="padding:10px 15px; ${done ? 'background:#ccc' : ''}" ${done ? 'disabled' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button></div>`;
+                list.innerHTML += `<div class="card"><span>Task ${i} (10 🍒)</span><button class="btn" onclick="goTask(${i})">Claim</button></div>`;
             }
         }
 
-        function goTask(id) {
-            window.open(adLink, '_blank');
-            points += 10;
-            localStorage.setItem(`t_${id}`, new Date().getTime());
-            update(); renderTasks();
+        function doTap() {
+            if (taps < 50) { points++; taps++; update(); }
+            else { window.open("https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c"); taps = 0; update(); }
         }
 
-        // উইথড্র প্রসেস লজিক
         function processWithdraw() {
             const amount = parseInt(document.getElementById('w-amount').value);
-            const address = document.getElementById('w-address').value;
-
-            if (!amount || amount < 5000) {
-                tg.showAlert("দুঃখিত, সর্বনিম্ন উইথড্র ৫০০০ 🍒");
-            } else if (amount > points) {
-                tg.showAlert("আপনার ব্যালেন্স পর্যাপ্ত নয়!");
-            } else if (!address || address.length < 10) {
-                tg.showAlert("অনুগ্রহ করে সঠিক BSC (BEP20) অ্যাড্রেস দিন।");
-            } else {
-                points -= amount;
-                update();
-                tg.showAlert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
-                document.getElementById('w-amount').value = '';
-                document.getElementById('w-address').value = '';
-            }
+            if(amount >= 5000 && points >= amount) { tg.showAlert("Withdraw Requested!"); points -= amount; update(); }
+            else { tg.showAlert("Insufficient balance or amount less than 5000!"); }
         }
 
-        if (tg.initDataUnsafe.user?.photo_url) document.getElementById('user-pic').src = tg.initDataUnsafe.user.photo_url;
         update();
     </script>
 </body>
