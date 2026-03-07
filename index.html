@@ -9,56 +9,49 @@
     <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="ace4b2a0-0bfe-493d-b8e2-c39de7fe1ce2"></script>
     
     <style>
-        :root { --primary: #2e7d32; --bg: #f1f8e9; }
+        :root { --primary: #2e7d32; --bg: #e1f5fe; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; user-select: none; overflow-x: hidden; }
-        .page { display: none; padding: 20px; padding-bottom: 90px; min-height: 100vh; box-sizing: border-box; text-align: center; }
+        .page { display: none; padding: 20px; padding-bottom: 100px; min-height: 100vh; box-sizing: border-box; text-align: center; }
         .active { display: block; }
 
-        /* ব্যালেন্স কার্ড ডিজাইন */
-        .balance-card { background: #fff9c4; margin: 15px auto; width: 90%; padding: 20px; border-radius: 25px; text-align: center; border: 3px solid #8d6e63; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .balance-card h1 { font-size: 38px; color: #d84315; margin: 5px 0; }
-        .progress-box { width: 80%; background: #eee; height: 10px; border-radius: 5px; margin: 10px auto; overflow: hidden; }
+        /* হেডার ও ব্যালেন্স ডিজাইন */
+        .balance-card { background: #fffde7; margin: 15px auto; width: 90%; padding: 20px; border-radius: 20px; text-align: center; border: 2px solid #8d6e63; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .balance-card h1 { font-size: 42px; color: #d84315; margin: 5px 0; font-weight: 800; }
+        .progress-box { width: 85%; background: #eee; height: 12px; border-radius: 6px; margin: 12px auto; overflow: hidden; border: 1px solid #ccc; }
         #fill { width: 0%; height: 100%; background: #1976d2; transition: width 0.2s; }
 
-        /* গেম এরিয়া: গাছ, মাটি এবং ঝুড়ি */
-        .game-zone { position: relative; height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; margin-top: 10px; }
-        
-        /* আপনার দেওয়া গাছ */
-        #plum-tree { width: 260px; z-index: 2; cursor: pointer; transition: transform 0.1s ease; margin-bottom: 20px; }
-        #plum-tree:active { transform: scale(0.92); }
+        /* গেম এরিয়া: গাছ ও ঝুড়ি */
+        .game-zone { position: relative; height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        #plum-tree { width: 260px; z-index: 2; cursor: pointer; transition: transform 0.1s; margin-bottom: 30px; }
+        #plum-tree:active { transform: scale(0.95); }
+        .ground { width: 100%; height: 50px; background: #81c784; border-radius: 50% 50% 0 0; position: absolute; bottom: 0; z-index: 1; }
+        .basket { width: 110px; position: absolute; bottom: 10px; z-index: 3; }
 
-        /* মাটি এবং ঝুড়ি ডিজাইন */
-        .ground { width: 100%; height: 60px; background: #689f38; border-radius: 50% 50% 0 0; position: absolute; bottom: 0; z-index: 1; border-bottom: 10px solid #5d4037; }
-        .basket { width: 120px; position: absolute; bottom: 15px; z-index: 3; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3)); }
-        
-        /* ফল ঝরে পড়ার এনিমেশন */
+        /* এনিমেশন */
         .plum-fall { position: absolute; font-size: 24px; animation: fallToBasket 0.8s ease-in forwards; z-index: 10; pointer-events: none; }
-        @keyframes fallToBasket {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateY(280px) scale(0.8); opacity: 0; }
-        }
+        @keyframes fallToBasket { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(280px); opacity: 0; } }
 
-        /* কার্ড ডিজাইন */
+        /* নেভিগেশন বাটন স্টাইল */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 2px solid #ddd; z-index: 1000; height: 75px; align-items: center; }
+        .nav-link { text-align: center; font-size: 11px; color: #555; cursor: pointer; flex: 1; transition: 0.3s; }
+        .nav-link img { width: 28px; height: 28px; display: block; margin: 0 auto 4px; filter: grayscale(100%); opacity: 0.6; }
+        .nav-link.active-nav { color: var(--primary); font-weight: bold; }
+        .nav-link.active-nav img { filter: none; opacity: 1; transform: scale(1.2); }
+
+        /* কার্ড স্টাইল */
         .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid var(--primary); }
         .btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .tg-icon { width: 22px; margin-right: 8px; vertical-align: middle; }
-
-        /* নেভিগেশন বার */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; z-index: 1000; }
-        .nav-link { text-align: center; font-size: 11px; color: #757575; cursor: pointer; flex: 1; }
-        .nav-link.active-nav { color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="home" class="page active">
-        <div style="font-weight:bold; color:var(--primary); padding:10px;">🍒 PlumMine</div>
+        <div style="font-weight:bold; color:var(--primary); padding:10px; font-size:22px;">🍒 PlumMine</div>
         <div class="balance-card">
-            <small>YOUR BOIROI BALANCE</small>
+            <small style="color:#8d6e63; font-weight:bold;">YOUR BOIROI BALANCE</small>
             <h1 id="bal">0</h1>
             <div class="progress-box"><div id="fill"></div></div>
-            <small>Ad Ready in [Tap: <span id="tc">0</span>/50]</small>
+            <small>Next ad: <span id="tc">0</span>/50</small>
         </div>
         
         <div class="game-zone" onclick="doTap()">
@@ -77,30 +70,33 @@
     <div id="withdraw" class="page">
         <h2 style="color:var(--primary)">💰 Withdraw</h2>
         <div class="balance-card">
-            <p>Minimum: 5000 🍒</p>
+            <p>Min Withdraw: 5000 🍒</p>
             <h2 id="w-bal" style="color:var(--primary)">0</h2>
         </div>
         <input id="wallet" type="text" placeholder="BSC Wallet Address" style="width:90%; padding:15px; border-radius:10px; border:1px solid #ddd; margin-top:10px;">
-        <button class="btn" style="width:90%; margin-top:15px; padding:15px" onclick="checkW()">Withdraw Now</button>
+        <button class="btn" style="width:90%; margin-top:15px; padding:18px" onclick="checkW()">Withdraw Now</button>
     </div>
 
     <div id="support" class="page">
         <h2 style="color:var(--primary)">🎧 Support</h2>
         <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi','_blank')">
-            <span><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="tg-icon"> Admin</span>
-            <button class="btn">Chat</button>
-        </div>
-        <div class="card" onclick="window.open('https://t.me/HasiEarnigZone','_blank')">
-            <span><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="tg-icon"> Channel</span>
-            <button class="btn">Join</button>
+            <span>Admin</span><button class="btn">Chat</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-link active-nav" onclick="nav('home', this)">🍒<br>Home</div>
-        <div class="nav-link" onclick="nav('tasks', this)">📋<br>Tasks</div>
-        <div class="nav-link" onclick="nav('withdraw', this)">💰<br>Withdraw</div>
-        <div class="nav-link" onclick="nav('support', this)">🎧<br>Support</div>
+        <div class="nav-link active-nav" onclick="nav('home', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Mine">PlumMine
+        </div>
+        <div class="nav-link" onclick="nav('tasks', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/1069/1069159.png" alt="Tasks">Tasks
+        </div>
+        <div class="nav-link" onclick="nav('withdraw', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" alt="Withdraw">Withdraw
+        </div>
+        <div class="nav-link" onclick="nav('support', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="Support">Support
+        </div>
     </nav>
 
     <script>
@@ -109,7 +105,7 @@
 
         let points = parseInt(localStorage.getItem('p_bal')) || 0;
         let taps = 0;
-        const directLink = "https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c";
+        const adLink = "https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c";
 
         function update() {
             document.getElementById('bal').innerText = points.toLocaleString();
@@ -129,19 +125,14 @@
         function doTap() {
             if (taps < 50) {
                 points++; taps++; update();
-                // ঝুড়িতে পড়ার এনিমেশন
                 const p = document.createElement('div');
                 p.className = 'plum-fall'; p.innerText = "🍒";
                 p.style.left = (Math.random() * 40 + 30) + "%";
                 document.getElementById('p-area').appendChild(p);
                 setTimeout(() => p.remove(), 800);
             } else {
-                // ৫০ ট্যাপ পূর্ণ হলে অ্যাড লজিক
-                if (Math.random() > 0.5 && typeof mndint !== 'undefined') {
-                    mndint.show();
-                } else {
-                    window.open(directLink, '_blank');
-                }
+                if (Math.random() > 0.5 && typeof mndint !== 'undefined') { mndint.show(); }
+                else { window.open(adLink, '_blank'); }
                 taps = 0; update();
             }
         }
@@ -149,31 +140,24 @@
         function renderTasks() {
             const taskDiv = document.getElementById('task-list');
             taskDiv.innerHTML = '';
-            const now = new Date().getTime();
-            for(let i=1; i<=10; i++) {
+            for(let i=1; i<=5; i++) {
                 const last = localStorage.getItem(`t_${i}`);
-                const done = last && (now - last < 86400000);
-                taskDiv.innerHTML += `
-                    <div class="card">
-                        <span>Daily Bonus Task ${i}</span>
-                        <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">
-                            ${done ? 'Completed' : '10 🍒 Claim'}
-                        </button>
-                    </div>`;
+                const done = last && (new Date().getTime() - last < 86400000);
+                taskDiv.innerHTML += `<div class="card"><span>Task ${i} (10 🍒)</span>
+                <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button></div>`;
             }
         }
 
         function goTask(id) {
-            window.open(directLink, '_blank');
+            window.open(adLink, '_blank');
             points += 10;
             localStorage.setItem(`t_${id}`, new Date().getTime());
             update(); renderTasks();
-            tg.showAlert("Reward Claimed!");
         }
 
         function checkW() {
-            if(points < 5000) tg.showAlert("Need 5000 🍒");
-            else tg.showAlert("Request Sent!");
+            if(points < 5000) tg.showAlert("Minimum 5000 needed!");
+            else tg.showAlert("Request Submitted!");
         }
 
         update(); renderTasks();
