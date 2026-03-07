@@ -9,125 +9,113 @@
     
     <style>
         :root { --primary: #2e7d32; --accent: #8d6e63; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #e3f2fd; margin: 0; padding: 0; user-select: none; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #e3f2fd; margin: 0; padding: 0; user-select: none; overflow: hidden; }
         .page { display: none; padding: 15px; padding-bottom: 90px; min-height: 100vh; box-sizing: border-box; text-align: center; }
         .active { display: block; }
 
-        /* হেডার: টাইটেলে ঝুড়ি ও বড়ই */
+        /* হেডার */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; }
         .header-left { display: flex; align-items: center; gap: 8px; font-size: 24px; font-weight: bold; color: #1a5d1a; }
-        .header-left img { width: 30px; }
         .header-right img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; }
 
-        /* ব্যালেন্স কার্ড ডিজাইন */
-        .balance-container { background: #fff9c4; border: 3px solid var(--accent); border-radius: 25px; width: 92%; margin: 10px auto; padding: 15px; box-shadow: 0 6px 0 #8d6e6333; position: relative; display: flex; flex-direction: column; align-items: flex-start; }
-        .balance-info { text-align: left; width: 60%; }
-        .balance-info small { font-weight: bold; color: #5d4037; font-size: 13px; }
-        .balance-info h1 { font-size: 45px; margin: 2px 0; color: #d84315; letter-spacing: -1px; }
-        .basket-side { position: absolute; right: 15px; top: 15px; width: 100px; } 
+        /* ব্যালেন্স কার্ড ও ঝুড়ি এনিমেশন */
+        .balance-container { background: #fff9c4; border: 3px solid var(--accent); border-radius: 25px; width: 92%; margin: 10px auto; padding: 15px; position: relative; display: flex; flex-direction: column; align-items: flex-start; }
+        .balance-info h1 { font-size: 45px; margin: 2px 0; color: #d84315; }
         
-        .progress-section { width: 100%; margin-top: 10px; text-align: left; }
-        .progress-label { font-size: 12px; color: #5d4037; font-weight: bold; margin-bottom: 5px; }
-        .progress-bar-bg { width: 100%; background: #fffde7; height: 12px; border-radius: 10px; border: 1px solid #d7ccc8; overflow: hidden; }
+        .basket-side { position: absolute; right: 15px; top: 15px; width: 90px; animation: bounce 2s infinite ease-in-out; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        .progress-bar-bg { width: 100%; background: #fffde7; height: 12px; border-radius: 10px; border: 1px solid #d7ccc8; overflow: hidden; margin-top: 10px; }
         #fill { width: 0%; height: 100%; background: linear-gradient(to right, #42a5f5, #1976d2); transition: width 0.3s; }
 
-        /* গেম এরিয়া: গাছের গোড়ায় ঝুড়ি */
-        .game-zone { position: relative; height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
-        #plum-tree { width: 250px; z-index: 5; cursor: pointer; transition: transform 0.1s; margin-bottom: 25px; }
+        /* গেম এরিয়া */
+        .game-zone { position: relative; height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; cursor: pointer; }
+        #plum-tree { width: 250px; z-index: 5; transition: transform 0.1s; margin-bottom: 30px; }
         #plum-tree:active { transform: scale(0.95); }
-        .ground-patch { width: 100%; height: 50px; background: #81c784; border-radius: 50% 50% 0 0; position: absolute; bottom: 0; z-index: 1; }
-        
-        /* আপনার নির্দেশিত ঝুড়ি */
-        .collect-basket { width: 120px; position: absolute; bottom: 10px; z-index: 6; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+        .ground-patch { width: 100%; height: 40px; background: #81c784; border-radius: 50% 50% 0 0; position: absolute; bottom: 0; z-index: 1; }
 
-        /* ফল পড়ার এনিমেশন */
-        .falling-plum { position: absolute; font-size: 24px; animation: fallAnim 0.8s ease-in forwards; z-index: 10; pointer-events: none; }
-        @keyframes fallAnim { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(280px); opacity: 0; } }
+        /* বড়ই পড়ার এনিমেশন */
+        .falling-plum { position: absolute; font-size: 24px; animation: fallToGround 0.6s ease-in forwards; z-index: 10; pointer-events: none; }
+        @keyframes fallToGround { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(260px); opacity: 1; } }
+        .on-ground { position: absolute; font-size: 18px; bottom: 15px; z-index: 2; opacity: 0.8; }
 
-        /* নেভিগেশন বার */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; height: 70px; align-items: center; }
-        .nav-link { text-align: center; font-size: 11px; color: #757575; cursor: pointer; text-decoration: none; flex: 1; display: flex; flex-direction: column; align-items: center; }
-        .nav-link img { width: 26px; height: 26px; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.6; }
+        /* নেভিগেশন */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; height: 70px; align-items: center; z-index: 1000; }
+        .nav-link { text-align: center; font-size: 11px; color: #757575; cursor: pointer; flex: 1; }
+        .nav-link img { width: 24px; display: block; margin: 0 auto 4px; opacity: 0.6; }
         .nav-link.active-nav { color: #8d6e63; font-weight: bold; }
-        .nav-link.active-nav img { filter: none; opacity: 1; }
+        .nav-link.active-nav img { opacity: 1; }
 
-        .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid var(--primary); }
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* কার্ড স্টাইল */
+        .card { background: white; padding: 15px; margin: 8px 0; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .icon-small { width: 24px; vertical-align: middle; margin-right: 10px; }
     </style>
 </head>
 <body>
 
     <div id="home" class="page active">
         <div class="header">
-            <div class="header-left">
-                🧺🍒 PlumMine
-            </div>
-            <div class="header-right">
-                <img id="user-pic" src="https://via.placeholder.com/35" alt="User">
-            </div>
+            <div class="header-left">🧺🍒 PlumMine</div>
+            <div class="header-right"><img id="user-pic" src="https://via.placeholder.com/35"></div>
         </div>
 
         <div class="balance-container">
             <div class="balance-info">
-                <small>YOUR BOIROI BALANCE</small>
+                <small style="font-weight:bold; color:#5d4037;">YOUR BOIROI BALANCE</small>
                 <h1 id="bal">0</h1>
             </div>
-            <img class="basket-side" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Basket Icon">
+            <img class="basket-side" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png">
             
-            <div class="progress-section">
-                <div class="progress-label">Next ad in [Tap: <span id="tc">0</span>/50]</div>
-                <div class="progress-bar-bg"><div id="fill"></div></div>
-            </div>
+            <div style="width:100%; text-align:left; font-size:12px; margin-top:5px; font-weight:bold;">Next ad in [Tap: <span id="tc">0</span>/50]</div>
+            <div class="progress-bar-bg"><div id="fill"></div></div>
         </div>
         
         <div class="game-zone" onclick="doTap()">
-            <img id="plum-tree" src="https://i.ibb.co.com/TBfn8G8M/27099-removebg-preview.png" alt="Tree">
+            <img id="plum-tree" src="https://i.ibb.co.com/TBfn8G8M/27099-removebg-preview.png">
             <div class="ground-patch"></div>
-            <img class="collect-basket" src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Basket">
-            <div id="p-area" style="position: absolute; top: 100px; width: 100%;"></div>
+            <div id="p-area" style="position: absolute; top: 100px; width: 100%; height: 300px;"></div>
         </div>
     </div>
 
     <div id="tasks" class="page">
         <h2 style="color:var(--primary)">📋 Daily Tasks</h2>
-        <div id="task-list"></div>
+        <div id="task-list" style="overflow-y: auto; max-height: 70vh;"></div>
     </div>
 
     <div id="withdraw" class="page">
         <h2 style="color:var(--primary)">💰 Withdraw</h2>
-        <div class="balance-container" style="align-items: center; text-align: center;">
-            <p>Min Withdraw: 5000 🍒</p>
+        <div class="balance-container" style="align-items: center;">
+            <p>Min: 5000 🍒</p>
             <h1 id="w-bal" style="color:var(--primary)">0</h1>
         </div>
-        <input type="text" placeholder="Wallet Address" style="width:90%; padding:15px; border-radius:10px; border:1px solid #ddd; margin-top:15px;">
-        <button class="btn" style="width:90%; margin-top:20px; padding:18px" onclick="checkW()">Withdraw Now</button>
+        <input type="text" id="wallet-addr" placeholder="Wallet Address" style="width:90%; padding:15px; border-radius:10px; border:1px solid #ddd; margin-top:15px;">
+        <button class="btn" style="width:90%; margin-top:20px; padding:15px" onclick="checkW()">Withdraw Now</button>
     </div>
 
     <div id="support" class="page">
         <h2 style="color:var(--primary)">🎧 Support Center</h2>
-        <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi','_blank')">
-            <span><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" style="width:20px; vertical-align:middle; margin-right:8px;"> Admin</span>
+        <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi')">
+            <span>
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="icon-small">
+                Admin Chat
+            </span>
             <button class="btn">Chat</button>
         </div>
-        <div class="card" onclick="window.open('https://t.me/HasiEarnigZone','_blank')">
-            <span><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" style="width:20px; vertical-align:middle; margin-right:8px;"> Channel</span>
+        <div class="card" onclick="window.open('https://t.me/HasiEarnigZone')">
+            <span>
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="icon-small">
+                Channel
+            </span>
             <button class="btn">Join</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-link active-nav" onclick="nav('home', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png" alt="Mine">PlumMine
-        </div>
-        <div class="nav-link" onclick="nav('withdraw', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" alt="Withdraw">Withdraw
-        </div>
-        <div class="nav-link" onclick="nav('tasks', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/1069/1069159.png" alt="Tasks">Tasks
-        </div>
-        <div class="nav-link" onclick="nav('support', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="Support">Support
-        </div>
+        <div class="nav-link active-nav" onclick="nav('home', this)"><img src="https://cdn-icons-png.flaticon.com/512/3082/3082003.png">Home</div>
+        <div class="nav-link" onclick="nav('tasks', this)"><img src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png">Tasks</div>
+        <div class="nav-link" onclick="nav('withdraw', this)"><img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png">Withdraw</div>
+        <div class="nav-link" onclick="nav('support', this)"><img src="https://cdn-icons-png.flaticon.com/512/4333/4333609.png">Support</div>
     </nav>
 
     <script>
@@ -151,6 +139,7 @@
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
             el.classList.add('active-nav');
+            if(id === 'tasks') renderTasks();
         }
 
         function doTap() {
@@ -160,10 +149,13 @@
                 p.className = 'falling-plum'; p.innerText = "🍒";
                 p.style.left = (Math.random() * 40 + 30) + "%";
                 document.getElementById('p-area').appendChild(p);
-                setTimeout(() => p.remove(), 800);
+                
+                setTimeout(() => {
+                    p.className = 'on-ground';
+                    setTimeout(() => p.remove(), 2000);
+                }, 600);
             } else {
-                if (Math.random() > 0.5 && typeof mndint !== 'undefined') { mndint.show(); }
-                else { window.open(adLink, '_blank'); }
+                window.open(adLink, '_blank');
                 taps = 0; update();
             }
         }
@@ -171,11 +163,17 @@
         function renderTasks() {
             const taskDiv = document.getElementById('task-list');
             taskDiv.innerHTML = '';
-            for(let i=1; i<=5; i++) {
+            for(let i=1; i<=10; i++) {
                 const last = localStorage.getItem(`t_${i}`);
                 const done = last && (new Date().getTime() - last < 86400000);
-                taskDiv.innerHTML += `<div class="card"><span>Task ${i} (10 🍒)</span>
-                <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button></div>`;
+                taskDiv.innerHTML += `
+                <div class="card">
+                    <span>
+                        <img src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png" class="icon-small">
+                        Task ${i} (10 🍒)
+                    </span>
+                    <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button>
+                </div>`;
             }
         }
 
@@ -186,11 +184,13 @@
             update(); renderTasks();
         }
 
-        if (tg.initDataUnsafe.user) {
-            if(tg.initDataUnsafe.user.photo_url) document.getElementById('user-pic').src = tg.initDataUnsafe.user.photo_url;
+        function checkW() {
+            if(points < 5000) tg.showAlert("Need 5000 🍒 to withdraw.");
+            else tg.showAlert("Withdraw Requested successfully!");
         }
 
-        update(); renderTasks();
+        if (tg.initDataUnsafe.user?.photo_url) document.getElementById('user-pic').src = tg.initDataUnsafe.user.photo_url;
+        update();
     </script>
 </body>
 </html>
