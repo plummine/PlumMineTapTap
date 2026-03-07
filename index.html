@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PlumMine - Tap to Earn</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="ace4b2a0-0bfe-493d-b8e2-c39de7fe1ce2"></script>
+    
+    <style>
+        :root { --primary: #2e7d32; --bg: #e1f5fe; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; user-select: none; overflow-x: hidden; }
+        .page { display: none; padding: 20px; padding-bottom: 90px; min-height: 100vh; box-sizing: border-box; text-align: center; }
+        .active { display: block; }
+
+        /* ডিজাইন অনুযায়ী ব্যালেন্স কার্ড */
+        .balance-card { background: #fff9c4; margin: 15px auto; width: 90%; padding: 20px; border-radius: 25px; text-align: center; border: 3px solid #8d6e63; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .balance-card h1 { font-size: 38px; color: #d84315; margin: 5px 0; }
+        .progress-box { width: 80%; background: #eee; height: 10px; border-radius: 5px; margin: 10px auto; overflow: hidden; }
+        #fill { width: 0%; height: 100%; background: #1976d2; transition: width 0.2s; }
+
+        /* বরই গাছ এবং টব ডিজাইন */
+        .game-zone { position: relative; height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; margin-top: 10px; }
+        #plum-tree { width: 220px; z-index: 2; cursor: pointer; transition: transform 0.1s ease; }
+        #plum-tree:active { transform: scale(0.92); }
+        .pot { width: 120px; margin-top: -15px; z-index: 1; }
+        
+        .plum-fall { position: absolute; font-size: 24px; animation: fallAnim 0.7s forwards; pointer-events: none; z-index: 10; }
+        @keyframes fallAnim { 0% { transform: translateY(0); opacity:1; } 100% { transform: translateY(220px); opacity:0; } }
+
+        /* কার্ড এবং বাটন */
+        .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid var(--primary); text-align: left; }
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .tg-icon { width: 22px; margin-right: 8px; vertical-align: middle; }
+
+        /* নেভিগেশন বার */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; z-index: 1000; }
+        .nav-link { text-align: center; font-size: 11px; color: #757575; cursor: pointer; flex: 1; }
+        .nav-link.active-nav { color: var(--primary); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="home" class="page active">
+        <div style="font-weight:bold; color:var(--primary); padding:10px;">🍒 PlumMine</div>
+        <div class="balance-card">
+            <small>YOUR BOIROI BALANCE</small>
+            <h1 id="bal">0</h1>
+            <div class="progress-box"><div id="fill"></div></div>
+            <small>Next ad in [Tap: <span id="tc">0</span>/50]</small>
+        </div>
+        <div class="game-zone" onclick="doTap()">
+            <img id="plum-tree" src="https://cdn-icons-png.flaticon.com/512/490/490099.png" alt="Tree">
+            <img class="pot" src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Pot">
+            <div id="p-area"></div>
+        </div>
+    </div>
+
+    <div id="tasks" class="page">
+        <h2 style="color:var(--primary)">📋 টাস্ক লিস্ট</h2>
+        <div id="task-list"></div>
+    </div>
+
+    <div id="withdraw" class="page">
+        <h2 style="color:var(--primary)">💰 উইথড্র</h2>
+        <div class="balance-card">
+            <p>মিনিমাম: 5000 🍒</p>
+            <h2 id="w-bal" style="color:var(--primary)">0</h2>
+        </div>
+        <input id="wallet" type="text" placeholder="Wallet Address" style="width:90%; padding:15px; border-radius:10px; border:1px solid #ddd; margin-top:10px;">
+        <button class="btn" style="width:90%; margin-top:15px; padding:15px" onclick="checkW()">Withdraw Now</button>
+    </div>
+
+    <div id="support" class="page">
+        <h2 style="color:var(--primary)">🎧 সাপোর্ট</h2>
+        <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi','_blank')">
+            <span><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="tg-icon"> Admin</span>
+            <button class="btn">Chat</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-link active-nav" onclick="nav('home')">🍒<br>PlumMine</div>
+        <div class="nav-link" onclick="nav('tasks')">📋<br>Tasks</div>
+        <div class="nav-link" onclick="nav('withdraw')">💰<br>Withdraw</div>
+        <div class="nav-link" onclick="nav('support')">🎧<br>Support</div>
+    </nav>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let points = parseInt(localStorage.getItem('p_bal')) || 0;
+        let taps = 0;
+        const directAd = "https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c";
+
+        function update() {
+            document.getElementById('bal').innerText = points.toLocaleString();
+            document.getElementById('w-bal').innerText = points.toLocaleString();
+            document.getElementById('tc').innerText = taps;
+            document.getElementById('fill').style.width = (taps / 50) * 100 + "%";
+            localStorage.setItem('p_bal', points);
+        }
+
+        function nav(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
+            // Find clicked element and add active class
+            const navs = document.querySelectorAll('.nav-link');
+            navs.forEach(n => { if(n.innerText.includes(id.charAt(0).toUpperCase() + id.slice(1))) n.classList.add('active-nav'); });
+        }
+
+        function doTap() {
+            if (taps < 50) {
+                points++; taps++; update();
+                const p = document.createElement('div');
+                p.className = 'plum-fall'; p.innerText = "🍒";
+                p.style.left = (Math.random() * 60 + 20) + "%";
+                document.getElementById('p-area').appendChild(p);
+                setTimeout(() => p.remove(), 700);
+            } else {
+                if (Math.random() > 0.5 && typeof mndint !== 'undefined') { mndint.show(); }
+                else { window.open(directAd, '_blank'); }
+                taps = 0; update();
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+            const now = new Date().getTime();
+            for(let i=1; i<=10; i++) {
+                const last = localStorage.getItem(`t_${i}`);
+                const done = last && (now - last < 86400000);
+                taskList.innerHTML += `
+                    <div class="card">
+                        <span>Task ${i}: 10 🍒</span>
+                        <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">
+                            ${done ? 'Completed' : 'Claim'}
+                        </button>
+                    </div>`;
+            }
+        }
+
+        function goTask(i) {
+            window.open(directAd, '_blank');
+            points += 10;
+            localStorage.setItem(`t_${i}`, new Date().getTime());
+            update(); renderTasks();
+            tg.showAlert("১০টি বড়ই যুক্ত হয়েছে!");
+        }
+
+        function checkW() {
+            if(points < 5000) tg.showAlert("মিনিমাম ৫০০০ বড়ই লাগবে।");
+            else tg.showAlert("রিকোয়েস্ট পাঠানো হয়েছে।");
+        }
+
+        update(); renderTasks();
+    </script>
+</body>
+</html>
