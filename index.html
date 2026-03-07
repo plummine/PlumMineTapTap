@@ -13,22 +13,21 @@
         .page { display: none; padding: 10px; padding-bottom: 90px; min-height: 100vh; box-sizing: border-box; text-align: center; }
         .active { display: block; }
 
-        /* ব্যালেন্স কার্ড ডিজাইন */
+        /* ব্যালেন্স কার্ড */
         .balance-container { background: #fff9c4; border: 3px solid var(--accent); border-radius: 25px; width: 94%; margin: 5px auto; padding: 15px; position: relative; display: flex; flex-direction: column; align-items: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .balance-info h1 { font-size: 48px; margin: 2px 0; color: #d84315; font-weight: 800; }
         
-        /* লাল ফল ভর্তি ঝুড়ি আইকন */
+        /* আপনার দেওয়া নতুন ছবি ব্যালেন্সের পাশে */
         .basket-side { position: absolute; right: 10px; top: 10px; width: 110px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); animation: bounce 2s infinite ease-in-out; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
         .progress-bar-bg { width: 100%; background: #fffde7; height: 14px; border-radius: 10px; border: 1px solid #d7ccc8; overflow: hidden; margin-top: 12px; }
         #fill { width: 0%; height: 100%; background: linear-gradient(to right, #42a5f5, #1976d2); transition: width 0.3s; }
 
-        /* বড় গাছ সেকশন: আপনার নির্দেশ অনুযায়ী অনেক বড় করা হয়েছে */
+        /* বড় গাছ সেকশন */
         .game-zone { position: relative; height: 55vh; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; }
-        #plum-tree { width: 95%; max-width: 450px; z-index: 5; transition: transform 0.1s; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+        #plum-tree { width: 95%; max-width: 450px; z-index: 5; transition: transform 0.1s; }
         #plum-tree:active { transform: scale(0.92); }
-        
         .ground-patch { width: 100%; height: 60px; background: #81c784; border-radius: 50% 50% 0 0; position: absolute; bottom: -20px; z-index: 1; }
 
         /* ফল পড়ার এনিমেশন */
@@ -42,8 +41,13 @@
         .nav-link img { width: 30px; display: block; margin: 0 auto 5px; }
         .nav-link.active-nav { color: #d84315; font-weight: bold; }
 
+        /* ইনপুট বক্স ডিজাইন */
+        .input-group { width: 90%; margin: 15px auto; text-align: left; }
+        .input-group label { font-size: 13px; font-weight: bold; color: #5d4037; display: block; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+
         .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .btn { background: var(--primary); color: white; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -51,17 +55,17 @@
     <div id="home" class="page active">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 20px;">
             <div style="font-size:24px; font-weight:bold; color:#1a5d1a;">🧺🍒 PlumMine</div>
-            <img id="user-pic" src="https://via.placeholder.com/40" style="width:40px; border-radius:50%; border:2px solid white;">
+            <img id="user-pic" src="https://via.placeholder.com/40" style="border-radius:50%;">
         </div>
 
         <div class="balance-container">
             <div class="balance-info">
-                <small style="font-weight:bold; color:#5d4037; letter-spacing:1px;">YOUR BOIROI BALANCE</small>
+                <small>YOUR BOIROI BALANCE</small>
                 <h1 id="bal">0</h1>
             </div>
-            <img class="basket-side" src="https://i.ibb.co.com/mC6S9f49/27080-removebg-preview.png">
+            <img class="basket-side" src="https://i.ibb.co.com/TDnYXwG1/27118-removebg-preview.png">
             
-            <div style="width:100%; text-align:left; font-size:13px; margin-top:8px; font-weight:bold; color:#5d4037;">Next ad in [Tap: <span id="tc">0</span>/50]</div>
+            <div style="width:100%; text-align:left; font-size:13px; margin-top:8px; font-weight:bold;">Next ad in [Tap: <span id="tc">0</span>/50]</div>
             <div class="progress-bar-bg"><div id="fill"></div></div>
         </div>
         
@@ -80,23 +84,34 @@
     <div id="withdraw" class="page">
         <h2 style="color:var(--primary)">💰 Withdraw</h2>
         <div class="balance-container" style="align-items: center;">
-            <p>Min: 5000 🍒</p>
+            <p>Your Current Balance</p>
             <h1 id="w-bal" style="color:#d84315;">0</h1>
+            <small>Minimum Withdraw: 5000 🍒</small>
         </div>
-        <input type="text" placeholder="Wallet Address" style="width:90%; padding:18px; border-radius:12px; border:1px solid #ddd; margin-top:20px; font-size:16px;">
-        <button class="btn" style="width:90%; margin-top:20px; padding:18px; font-size:18px;" onclick="checkW()">Withdraw Now</button>
+
+        <div class="input-group">
+            <label>Amount to Withdraw</label>
+            <input type="number" id="w-amount" placeholder="Enter Amount (Min 5000)">
+        </div>
+
+        <div class="input-group">
+            <label>Binance B2P BSC (BEP20) Address</label>
+            <input type="text" id="w-address" placeholder="Paste your BSC Address here">
+        </div>
+
+        <button class="btn" style="width:90%;" onclick="processWithdraw()">Withdraw Now</button>
     </div>
 
     <div id="support" class="page">
         <h2 style="color:var(--primary)">🎧 Support Center</h2>
         <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi')">
-            <span>Admin Support</span><button class="btn">Chat</button>
+            <span>Admin Support</span><button class="btn" style="padding:10px 15px">Chat</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-link active-nav" onclick="nav('home', this)">
-            <img src="https://i.ibb.co.com/mC6S9f49/27080-removebg-preview.png">Home
+            <img src="https://i.ibb.co.com/TDnYXwG1/27118-removebg-preview.png">Home
         </div>
         <div class="nav-link" onclick="nav('tasks', this)">
             <img src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png">Tasks
@@ -140,11 +155,7 @@
                 p.className = 'falling-plum'; p.innerText = "🍒";
                 p.style.left = (Math.random() * 60 + 20) + "%";
                 document.getElementById('p-area').appendChild(p);
-                
-                setTimeout(() => {
-                    p.className = 'on-ground';
-                    setTimeout(() => p.remove(), 1500);
-                }, 500);
+                setTimeout(() => { p.className = 'on-ground'; setTimeout(() => p.remove(), 1500); }, 500);
             } else {
                 window.open(adLink, '_blank');
                 taps = 0; update();
@@ -157,11 +168,8 @@
             for(let i=1; i<=10; i++) {
                 const last = localStorage.getItem(`t_${i}`);
                 const done = last && (new Date().getTime() - last < 86400000);
-                taskDiv.innerHTML += `
-                <div class="card">
-                    <span>Task ${i} (10 🍒)</span>
-                    <button class="btn" ${done ? 'disabled style="background:#ccc"' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button>
-                </div>`;
+                taskDiv.innerHTML += `<div class="card"><span>Task ${i} (10 🍒)</span>
+                <button class="btn" style="padding:10px 15px; ${done ? 'background:#ccc' : ''}" ${done ? 'disabled' : ''} onclick="goTask(${i})">${done ? 'Done' : 'Claim'}</button></div>`;
             }
         }
 
@@ -172,9 +180,24 @@
             update(); renderTasks();
         }
 
-        function checkW() {
-            if(points < 5000) tg.showAlert("Need 5000 🍒");
-            else tg.showAlert("Requested!");
+        // উইথড্র প্রসেস লজিক
+        function processWithdraw() {
+            const amount = parseInt(document.getElementById('w-amount').value);
+            const address = document.getElementById('w-address').value;
+
+            if (!amount || amount < 5000) {
+                tg.showAlert("দুঃখিত, সর্বনিম্ন উইথড্র ৫০০০ 🍒");
+            } else if (amount > points) {
+                tg.showAlert("আপনার ব্যালেন্স পর্যাপ্ত নয়!");
+            } else if (!address || address.length < 10) {
+                tg.showAlert("অনুগ্রহ করে সঠিক BSC (BEP20) অ্যাড্রেস দিন।");
+            } else {
+                points -= amount;
+                update();
+                tg.showAlert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+                document.getElementById('w-amount').value = '';
+                document.getElementById('w-address').value = '';
+            }
         }
 
         if (tg.initDataUnsafe.user?.photo_url) document.getElementById('user-pic').src = tg.initDataUnsafe.user.photo_url;
