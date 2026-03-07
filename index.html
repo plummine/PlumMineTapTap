@@ -13,39 +13,42 @@
         .page { display: none; padding: 10px; padding-bottom: 90px; height: 100vh; box-sizing: border-box; text-align: center; overflow-y: auto; }
         .active { display: block; }
 
-        /* ব্যালেন্স কার্ড */
+        /* ব্যালেন্স কার্ড ও ডিজাইন */
         .balance-container { background: #fff9c4; border: 3px solid var(--accent); border-radius: 25px; width: 94%; margin: 5px auto; padding: 15px; position: relative; display: flex; flex-direction: column; align-items: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .balance-info h1 { font-size: 48px; margin: 2px 0; color: #d84315; font-weight: 800; }
         .basket-side { position: absolute; right: 10px; top: 10px; width: 110px; animation: bounce 2s infinite ease-in-out; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* গাছ সেকশন */
+        /* ৫০ ট্যাপ লজিক ডিজাইন */
+        .progress-bar-bg { width: 100%; background: #fffde7; height: 14px; border-radius: 10px; border: 1px solid #d7ccc8; overflow: hidden; margin-top: 10px; }
+        #fill { width: 0%; height: 100%; background: linear-gradient(to right, #42a5f5, #1976d2); transition: width 0.3s; }
+
+        /* বড় গাছ সেকশন */
         .game-zone { position: relative; height: 50vh; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         #plum-tree { width: 95%; max-width: 450px; transition: transform 0.1s; }
         #plum-tree:active { transform: scale(0.92); }
 
-        /* টাস্ক লিস্ট স্ক্রলিং ঠিক করা হয়েছে */
-        #task-list { max-height: 65vh; overflow-y: auto; padding: 10px; border-radius: 15px; }
-
-        /* নেভিগেশন বার - রেফার বাটন যুক্ত */
+        /* নেভিগেশন বার */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; height: 75px; align-items: center; z-index: 1000; }
         .nav-link { text-align: center; font-size: 11px; color: #777; cursor: pointer; flex: 1; }
         .nav-link img { width: 26px; display: block; margin: 0 auto 4px; }
         .nav-link.active-nav { color: #d84315; font-weight: bold; }
 
         /* ফ্লোটিং টেলিগ্রাম বাটন */
-        .floating-tg { position: fixed; bottom: 90px; right: 20px; width: 55px; height: 55px; background: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 2000; cursor: pointer; animation: pulse 2s infinite; }
-        .floating-tg img { width: 35px; height: 35px; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .floating-tg { position: fixed; bottom: 90px; right: 20px; width: 55px; height: 55px; background: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 2000; cursor: pointer; }
+        .floating-tg img { width: 35px; }
 
-        .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .card { background: white; padding: 15px; margin: 10px 0; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        
+        /* টাস্ক স্ক্রলিং এরিয়া */
+        #task-list { max-height: 60vh; overflow-y: auto; }
     </style>
 </head>
 <body>
 
     <div class="floating-tg" onclick="window.open('https://t.me/HasiEarnigZone')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
     </div>
 
     <div id="home" class="page active">
@@ -59,6 +62,7 @@
                 <h1 id="bal">0</h1>
             </div>
             <img class="basket-side" src="https://i.ibb.co.com/TDnYXwG1/27118-removebg-preview.png">
+            <div style="width:100%; text-align:left; font-size:12px; margin-top:8px; font-weight:bold;">Next ad in [Tap: <span id="tc">0</span>/50]</div>
             <div class="progress-bar-bg"><div id="fill"></div></div>
         </div>
         <div class="game-zone" onclick="doTap()">
@@ -68,33 +72,31 @@
     </div>
 
     <div id="tasks" class="page">
-        <h2 style="color:var(--primary)">📋 Daily Tasks</h2>
+        <h2 style="color:var(--primary)">📋 Daily Tasks (10)</h2>
         <div id="task-list"></div>
     </div>
 
     <div id="refer" class="page">
-        <h2 style="color:var(--primary)">👥 Refer Friends</h2>
-        <div class="card" style="flex-direction: column; gap: 15px;">
-            <p>Invite friends and earn 100 🍒 for each!</p>
-            <button class="btn" onclick="tg.shareLink('https://t.me/PlumMineBot?start=ref')">Invite Now</button>
+        <h2 style="color:var(--primary)">👥 Referral Program</h2>
+        <div class="card">
+            <p>Your Referral Link:</p>
+            <input type="text" id="ref-link" readonly style="width:90%; padding:10px; border:1px solid #ddd; border-radius:5px; background:#f9f9f9;">
+            <button class="btn" onclick="copyRef()">Copy Link</button>
+            <button class="btn" style="background:#0088cc" onclick="shareRef()">Invite on Telegram</button>
         </div>
     </div>
 
     <div id="withdraw" class="page">
         <h2 style="color:var(--primary)">💰 Withdraw</h2>
         <input type="number" id="w-amount" placeholder="Amount (Min 5000)" style="width:90%; padding:15px; margin-bottom:10px; border-radius:10px; border:1px solid #ccc;">
-        <input type="text" id="w-address" placeholder="BSC (BEP20) Address" style="width:90%; padding:15px; margin-bottom:15px; border-radius:10px; border:1px solid #ccc;">
-        <button class="btn" style="width:90%" onclick="processWithdraw()">Withdraw Now</button>
+        <input type="text" id="w-address" placeholder="Binance B2P BSC Address" style="width:90%; padding:15px; border-radius:10px; border:1px solid #ccc;">
+        <button class="btn" onclick="processWithdraw()">Withdraw Now</button>
     </div>
 
     <div id="support" class="page">
-        <h2 style="color:var(--primary)">🎧 Support</h2>
-        <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi')">
-            <span>Admin Chat</span><button class="btn">Chat</button>
-        </div>
-        <div class="card" onclick="window.open('https://t.me/HasiEarnigZone')">
-            <span>Our Channel</span><button class="btn">Join</button>
-        </div>
+        <h2 style="color:var(--primary)">🎧 Support Center</h2>
+        <div class="card" onclick="window.open('https://t.me/SumaiyaJannatHasi')"><span>Admin Chat</span></div>
+        <div class="card" onclick="window.open('https://t.me/HasiEarnigZone')"><span>Telegram Channel</span></div>
     </div>
 
     <nav class="bottom-nav">
@@ -108,12 +110,16 @@
     <script>
         const tg = window.Telegram.WebApp;
         let points = parseInt(localStorage.getItem('p_bal')) || 0;
-        let taps = 0;
+        let taps = parseInt(localStorage.getItem('t_count')) || 0;
+        const userId = tg.initDataUnsafe.user?.id || "12345";
+        document.getElementById('ref-link').value = `https://t.me/PlumMineBot?start=${userId}`;
 
         function update() {
             document.getElementById('bal').innerText = points.toLocaleString();
+            document.getElementById('tc').innerText = taps;
             document.getElementById('fill').style.width = (taps / 50) * 100 + "%";
             localStorage.setItem('p_bal', points);
+            localStorage.setItem('t_count', taps);
         }
 
         function nav(id, el) {
@@ -124,6 +130,16 @@
             if(id === 'tasks') renderTasks();
         }
 
+        function doTap() {
+            if (taps < 50) {
+                points++; taps++; update();
+                // ফল পড়ার এনিমেশন কোড এখানে
+            } else {
+                window.open("https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c", "_blank");
+                taps = 0; update();
+            }
+        }
+
         function renderTasks() {
             const list = document.getElementById('task-list');
             list.innerHTML = '';
@@ -132,15 +148,22 @@
             }
         }
 
-        function doTap() {
-            if (taps < 50) { points++; taps++; update(); }
-            else { window.open("https://www.effectivegatecpm.com/eu58bq8h?key=ddafcd4b90ae80d8637cde448cec9d9c"); taps = 0; update(); }
+        function copyRef() {
+            const link = document.getElementById('ref-link');
+            link.select();
+            document.execCommand('copy');
+            tg.showAlert("Link Copied!");
+        }
+
+        function shareRef() {
+            const url = document.getElementById('ref-link').value;
+            tg.openTelegramLink(`https://t.me/share/url?url=${url}&text=Join PlumMine and earn 🍒!`);
         }
 
         function processWithdraw() {
             const amount = parseInt(document.getElementById('w-amount').value);
-            if(amount >= 5000 && points >= amount) { tg.showAlert("Withdraw Requested!"); points -= amount; update(); }
-            else { tg.showAlert("Insufficient balance or amount less than 5000!"); }
+            if(amount >= 5000 && points >= amount) { tg.showAlert("Request Submitted!"); points -= amount; update(); }
+            else { tg.showAlert("Minimum 5000 🍒 required!"); }
         }
 
         update();
