@@ -126,7 +126,7 @@
         const user = tg.initDataUnsafe.user || { id: "Guest", first_name: "User" };
 
         if (user.photo_url) document.getElementById('user-pic').src = user.photo_url;
-        document.getElementById('ref-link').value = `https://t.me/PlumMineBot?start=${user.id}`;
+        document.getElementById('ref-link').value = `https://t.me/PlumMineTap_Bot?start=${user.id}`;
 
         function update() {
             document.getElementById('bal').innerText = points.toLocaleString();
